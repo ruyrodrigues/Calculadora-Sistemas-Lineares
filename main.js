@@ -1,37 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const createMatrixBtn = document.getElementById('create-matrix-btn');
-    const calculateBtn = document.getElementById('calculate-btn');
-  
-    createMatrixBtn.addEventListener('click', function() {
-        const numRows = parseInt(document.getElementById('num-rows').value);
-        const numColumns = parseInt(document.getElementById('num-columns').value);
-      
-        if (numRows > 0 && numColumns > 0) {
-          createMatrixInput(numRows, numColumns);
-        } else {
-          alert('Informe um número válido de linhas e colunas.');
-        }
-      });
-      
-  
-    calculateBtn.addEventListener('click', function() {
-      const matrix = getMatrixInput();
-      const solution = solveGaussianElimination(matrix);
-      displaySolution(solution);
-    });
+  const createMatrixBtn = document.getElementById('create-matrix-btn');
+  const calculateBtn = document.getElementById('calculate-btn');
+
+  createMatrixBtn.addEventListener('click', function() {
+    const numRows = parseInt(document.getElementById('num-rows').value);
+    const numColumns = parseInt(document.getElementById('num-columns').value);
+
+    createMatrixInput(numRows, numColumns, 'matrix-a');
+    createMatrixInput(numRows, 1, 'matrix-b');
+  });
+
+  calculateBtn.addEventListener('click', function() {
+    const matrixA = getMatrixInput('matrix-a');
+    const matrixB = getMatrixInput('matrix-b');
+
+    if (matrixA.length === 0 || matrixB.length === 0) {
+      console.error('As matrizes não estão preenchidas corretamente.');
+      return;
+    }
+
+    const solution = solveGaussianElimination(matrixA, matrixB);
+    displaySolution(solution);
   });
   
-  function createMatrixInput(numRows, numColumns) {
-    const matrixTable = document.getElementById('matrix');
-    matrixTable.innerHTML = '';
   
+  function createMatrixInput(numRows, numColumns, matrixId) {
+    const matrixTable = document.getElementById(matrixId);
+    matrixTable.innerHTML = '';
+
     for (let i = 0; i < numRows; i++) {
       const row = document.createElement('tr');
-  
-      for (let j = 0; j <= numColumns; j++) {
+
+      for (let j = 0; j < numColumns + 1; j++) {
         const cell = document.createElement('td');
         const input = document.createElement('input');
-  
+
         if (j < numColumns) {
           input.type = 'number';
           input.step = 'any';
@@ -39,45 +42,97 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           input.type = 'number';
           input.step = 'any';
-          input.disabled = true;
         }
-  
+
         cell.appendChild(input);
         row.appendChild(cell);
       }
-  
+
       matrixTable.appendChild(row);
     }
-  
+
     document.getElementById('matrix-input').style.display = 'block';
   }
   
-  
-  function getMatrixInput() {
-    const matrixTable = document.getElementById('matrix');
+  function getMatrixInput(matrixId) {
+    const matrixTable = document.getElementById(matrixId);
+
+    if (!matrixTable) {
+      console.error(`Tabela de matriz "${matrixId}" não encontrada.`);
+      return [];
+    }
+
     const rows = matrixTable.getElementsByTagName('tr');
     const matrix = [];
-  
+
     for (let i = 0; i < rows.length; i++) {
       const cells = rows[i].getElementsByTagName('td');
       const row = [];
-  
+
       for (let j = 0; j < cells.length; j++) {
-        const input = cells[j].getElementsByTagName('input')[0];
-        const value = parseFloat(input.value);
-  
-        row.push(value);
+        const input = cells[j].querySelector('input');
+
+        if (input) {
+          const value = parseFloat(input.value);
+
+          if (isNaN(value)) {
+            console.error('Os valores da matriz devem ser números válidos.');
+            return [];
+          }
+
+          row.push(value);
+        }
       }
-  
-      matrix.push(row);
+
+      if (row.length > 0) {
+        matrix.push(row);
+      }
     }
-  
+
     return matrix;
   }
   
-  function solveGaussianElimination(matrix) {
-    // Lógica para resolver a matriz usando eliminação de Gauss
-    // Retorne a solução da matriz
+  function solveGaussianElimination(matrixA, matrixB) {
+    const n = matrixA.length;
+  
+    // Concatenar a matriz B à matriz A
+    for (let i = 0; i < n; i++) {
+      matrixA[i].push(matrixB[i][0]);
+    }
+  
+    for (let i = 0; i < n; i++) {
+      // Encontrar o pivô máximo
+      let maxRow = i;
+      for (let j = i + 1; j < n; j++) {
+        if (Math.abs(matrixA[j][i]) > Math.abs(matrixA[maxRow][i])) {
+          maxRow = j;
+        }
+      }
+  
+      // Trocar as linhas se necessário
+      if (maxRow !== i) {
+        [matrixA[i], matrixA[maxRow]] = [matrixA[maxRow], matrixA[i]];
+      }
+  
+      // Zerar os elementos abaixo do pivô
+      for (let j = i + 1; j < n; j++) {
+        const factor = matrixA[j][i] / matrixA[i][i];
+        for (let k = i; k <= n; k++) {
+          matrixA[j][k] -= factor * matrixA[i][k];
+        }
+      }
+    }
+  
+    // Resolver o sistema triangular superior
+    const solution = new Array(n);
+    for (let i = n - 1; i >= 0; i--) {
+      solution[i] = matrixA[i][n] / matrixA[i][i];
+      for (let j = i - 1; j >= 0; j--) {
+        matrixA[j][n] -= matrixA[j][i] * solution[i];
+      }
+    }
+  
+    return solution;
   }
   
   function displaySolution(solution) {
@@ -95,4 +150,4 @@ document.addEventListener('DOMContentLoaded', function() {
   
     document.getElementById('result').style.display = 'block';
   }
-  
+});
