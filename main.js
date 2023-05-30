@@ -3,11 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const calculateBtn = document.getElementById('calculate-btn');
 
   createMatrixBtn.addEventListener('click', function() {
-    const numRows = parseInt(document.getElementById('num-rows').value);
-    const numColumns = parseInt(document.getElementById('num-columns').value);
+    const matrixOrder = parseInt(document.getElementById('matrix-order').value);
 
-    createMatrixInput(numRows, numColumns, 'matrix-a');
-    createMatrixInput(numRows, 1, 'matrix-b');
+    createMatrixInput(matrixOrder, matrixOrder, 'matrix-a');
+    createMatrixInput(matrixOrder, 1, 'matrix-b');
   });
 
   calculateBtn.addEventListener('click', function() {
@@ -31,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < numRows; i++) {
       const row = document.createElement('tr');
 
-      for (let j = 0; j < numColumns + 1; j++) {
+      for (let j = 0; j < numColumns; j++) {
         const cell = document.createElement('td');
         const input = document.createElement('input');
 

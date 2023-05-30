@@ -1,0 +1,18 @@
+.matrix-container {
+    display: flex;
+  }
+
+.matrix-container table {
+    margin-right: 20px;
+}
+
+.matrix-titles {
+    display: flex;
+    width: 100%;
+    max-width: 405px;
+    justify-content: space-between;
+}
+
+#calculate-btn {
+    margin-top: 10px;
+}
