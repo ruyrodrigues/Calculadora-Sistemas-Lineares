@@ -6,13 +6,13 @@
     margin-right: 20px;
 }
 
-.matrix-titles {
-    display: flex;
-    width: 100%;
-    max-width: 405px;
-    justify-content: space-between;
-}
-
 #calculate-btn {
     margin-top: 10px;
 }
+
+.matrix-title {
+    text-align: left; /* Alinhamento à direita para o título da matriz */
+    margin-top: 3px;
+    margin-bottom: 0px;
+  }
+
