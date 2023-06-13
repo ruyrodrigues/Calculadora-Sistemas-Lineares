@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function solveGaussianElimination(matrixA, matrixB) {
     const n = matrixA.length;
+    const steps = [];
   
     // Concatenar a matriz B à matriz A
     for (let i = 0; i < n; i++) {
@@ -100,17 +101,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   
     for (let i = 0; i < n; i++) {
+      // Armazenar a matriz atual em cada etapa
+      steps.push(JSON.parse(JSON.stringify(matrixA)));
+  
+      // Verificar se o elemento da diagonal principal é nulo
+      if (matrixA[i][i] === 0) {
+        // Encontrar o índice da primeira linha não nula
+        let swapRow = -1;
+        for (let j = i + 1; j < n; j++) {
+          if (matrixA[j][i] !== 0) {
+            swapRow = j;
+            break;
+          }
+        }
+        // Trocar as linhas se necessário
+        if (swapRow !== -1) {
+          [matrixA[i], matrixA[swapRow]] = [matrixA[swapRow], matrixA[i]];
+          [matrixB[i], matrixB[swapRow]] = [matrixB[swapRow], matrixB[i]];
+        }
+      }
+  
       // Encontrar o pivô máximo
       let maxRow = i;
       for (let j = i + 1; j < n; j++) {
         if (Math.abs(matrixA[j][i]) > Math.abs(matrixA[maxRow][i])) {
           maxRow = j;
         }
-      }
-  
-      // Trocar as linhas se necessário
-      if (maxRow !== i) {
-        [matrixA[i], matrixA[maxRow]] = [matrixA[maxRow], matrixA[i]];
       }
   
       // Zerar os elementos abaixo do pivô
@@ -131,8 +147,47 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   
+    // Armazenar a matriz final
+    steps.push(JSON.parse(JSON.stringify(matrixA)));
+  
+    // Exibir cada etapa da matriz
+    for (let i = 0; i < steps.length; i++) {
+      const stepTitle = document.createElement('h3');
+      stepTitle.textContent = `Etapa ${i + 1}:`;
+      document.getElementById('matrix-steps').appendChild(stepTitle);
+  
+      const matrixId = `step-matrix-${i + 1}`;
+      const matrixContainer = document.createElement('div');
+      matrixContainer.classList.add('matrix-container');
+      matrixContainer.innerHTML = `<table id="${matrixId}"></table>`;
+      document.getElementById('matrix-steps').appendChild(matrixContainer);
+  
+      displayMatrix(steps[i], matrixId);
+    }
+  
     return solution;
   }
+    
+
+  function displayMatrix(matrix, matrixId) {
+    const matrixTable = document.getElementById(matrixId);
+    matrixTable.innerHTML = '';
+  
+    for (let i = 0; i < matrix.length; i++) {
+      const row = document.createElement('tr');
+  
+      for (let j = 0; j < matrix[i].length; j++) {
+        const cell = document.createElement('td');
+        const value = document.createTextNode(matrix[i][j]);
+        cell.appendChild(value);
+        row.appendChild(cell);
+      }
+  
+      matrixTable.appendChild(row);
+    }
+  }
+  
+
   
   function displaySolution(solution) {
     const solutionDiv = document.getElementById('solution');
