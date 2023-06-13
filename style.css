@@ -1,18 +1,122 @@
-.matrix-container {
-    display: flex;
-  }
-
-.matrix-container table {
-    margin-right: 20px;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f6f6f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-#calculate-btn {
-    margin-top: 10px;
+.container {
+  max-width: 500px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+  color: #333;
+}
+
+.matrix-container {
+  display: flex;
+}
+
+.matrix-container table {
+  margin-right: 20px;
 }
 
 .matrix-title {
-    text-align: left; /* Alinhamento à direita para o título da matriz */
-    margin-top: 3px;
-    margin-bottom: 0px;
-  }
+  text-align: left;
+  margin-top: 3px;
+  margin-bottom: 0;
+  color: #666;
+}
+
+.matrix-container td input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 2px;
+  font-size: 16px;
+}
+
+#calculate-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#calculate-btn:hover {
+  background-color: #45a049;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.result h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.result p {
+  margin: 0;
+  font-weight: bold;
+  color: #666;
+}
+
+.order-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.order-input label {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-input input {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  outline: none;
+}
+
+.order-input button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 4px;
+}
+
+.order-input button:hover {
+  background-color: #45a049;
+}
 
