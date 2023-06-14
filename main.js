@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function createMatrixInput(numRows, numColumns, matrixId) {
     const matrixTable = document.getElementById(matrixId);
     matrixTable.innerHTML = '';
-
+  
     for (let i = 0; i < numRows; i++) {
       const row = document.createElement('tr');
-
+  
       for (let j = 0; j < numColumns; j++) {
         const cell = document.createElement('td');
         const input = document.createElement('input');
-
+  
         if (j < numColumns) {
           input.type = 'number';
           input.step = 'any';
@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
           input.type = 'number';
           input.step = 'any';
         }
-
+  
         cell.appendChild(input);
         row.appendChild(cell);
       }
-
+  
       matrixTable.appendChild(row);
     }
-
+  
     document.getElementById('matrix-input').style.display = 'block';
   }
   
@@ -151,12 +151,12 @@ document.addEventListener('DOMContentLoaded', function() {
     steps.push(JSON.parse(JSON.stringify(matrixA)));
   
     // Exibir cada etapa da matriz
-    for (let i = 0; i < steps.length; i++) {
+    for (let i = 1; i < steps.length - 1; i++) {
       const stepTitle = document.createElement('h3');
-      stepTitle.textContent = `Etapa ${i + 1}:`;
+      stepTitle.textContent = `Etapa ${i}:`;
       document.getElementById('matrix-steps').appendChild(stepTitle);
   
-      const matrixId = `step-matrix-${i + 1}`;
+      const matrixId = `step-matrix-${i}`;
       const matrixContainer = document.createElement('div');
       matrixContainer.classList.add('matrix-container');
       matrixContainer.innerHTML = `<table id="${matrixId}"></table>`;
@@ -168,27 +168,27 @@ document.addEventListener('DOMContentLoaded', function() {
     return solution;
   }
     
-
   function displayMatrix(matrix, matrixId) {
     const matrixTable = document.getElementById(matrixId);
     matrixTable.innerHTML = '';
+    matrixTable.classList.add('matrix-table'); // Adicionar a classe CSS
   
     for (let i = 0; i < matrix.length; i++) {
       const row = document.createElement('tr');
   
       for (let j = 0; j < matrix[i].length; j++) {
         const cell = document.createElement('td');
-        const value = document.createTextNode(matrix[i][j]);
-        cell.appendChild(value);
+        const value = matrix[i][j];
+        const formattedValue = Number.isInteger(value) ? value : value.toFixed(2);
+        const textNode = document.createTextNode(formattedValue);
+        cell.appendChild(textNode);
         row.appendChild(cell);
       }
   
       matrixTable.appendChild(row);
     }
   }
-  
 
-  
   function displaySolution(solution) {
     const solutionDiv = document.getElementById('solution');
     solutionDiv.textContent = '';
@@ -196,12 +196,13 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < solution.length; i++) {
       const variable = i + 1;
       const value = solution[i].toFixed(2);
-      const equation = document.createTextNode(`x${variable} = ${value}`);
+      const equation = document.createElement('p');
+      equation.textContent = `x${variable} = ${value}`;
   
       solutionDiv.appendChild(equation);
-      solutionDiv.appendChild(document.createElement('br'));
     }
   
     document.getElementById('result').style.display = 'block';
   }
+  
 });
