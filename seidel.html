@@ -5,20 +5,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="seidel.css">
+    <script src="seidel.js"></script>
     <title>Seidel</title>
 </head>
 
 <body>
     <a href="index.html" class="back-button">Voltar</a>
 
-    <h1>Seidel</h1>
+    <div class="header-top">
+        <h1>Gauss-Seidel</h1>
+        <div class="order-input">
+            <label for="matrix-order">Determine a Ordem da Matriz A:</label>
+            <input type="number" id="matrix-order" class="matrix-inputField" min="2" step="1" value="2" required>
+            <button id="create-matrix-btn">Criar Matriz</button>
+        </div>
+        <div class="epsilon-input">
+            <label for="matrix-order">Determine o Épsilon:</label>
+            <input type="number" step="0.0001" id="epsilon-value" class="epsilon-inputField" min="0.0001" max="1" placeholder="0.05" required>
+        </div>
+    </div>
 
-    <label for="order">Informe a ordem da matrix</label>
-    <input type="number" name="order" id="order">
+    <div id="matrix-input" style="display: none;">
+        <h2 class="fillMatrix-title">Preencha as matrizes</h2>
+        <div class="matrix-container">
+            <div>
+                <h3 class="matrix-title">Matriz A</h3>
+                <table id="matrix-a"></table>
+            </div>
+            <div>
+                <h3 class="matrix-title">Matriz B</h3>
+                <table id="matrix-b"></table>
+            </div>
+            <div class="chute-container">
+                <h3 class="matrix-title">Chute Inicial</h3>
+                <table id="chute-inicial"></table>
+            </div>
+        </div>
+       
+        <button id="calculate-btn">Calcular</button>
+    </div>
 
-    <button>Gerar Matrix</button>
-
-    <div id="matriz-container"></div>
+    <div id="solution-container"></div>
 </body>
 
 </html>
