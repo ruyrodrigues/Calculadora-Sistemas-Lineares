@@ -3,8 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const calculateBtn = document.getElementById('calculate-btn');
 
   createMatrixBtn.addEventListener('click', function() {
+    // Reiniciar a div de resultado
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('matrix-steps').innerHTML = '';
+    document.getElementById('matrix-l').innerHTML = '';
+    document.getElementById('matrix-u').innerHTML = '';
+    document.getElementById('matrix-p').innerHTML = '';
+    document.getElementById('solution').innerHTML = '';
+  
     const matrixOrder = parseInt(document.getElementById('matrix-order').value);
-
+  
     createMatrixInput(matrixOrder, matrixOrder, 'matrix-a');
     createMatrixInput(matrixOrder, 1, 'matrix-b');
   });
@@ -31,6 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!allFieldsFilled) {
       alert('Preencha todos os campos da matriz antes de calcular.');
     } else {
+      // Reiniciar a div de resultado
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('matrix-steps').innerHTML = '';
+      document.getElementById('matrix-l').innerHTML = '';
+      document.getElementById('matrix-u').innerHTML = '';
+      document.getElementById('matrix-p').innerHTML = '';
+      document.getElementById('solution').innerHTML = '';
       const matrixA = getMatrixInput('matrix-a');
       const matrixB = getMatrixInput('matrix-b');
   
@@ -39,8 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
   
-      const solution = solveGaussianElimination(matrixA, matrixB);
-      displaySolution(solution);
+      solveGaussianElimination(matrixA, matrixB);
     }
   });
   
@@ -107,6 +121,22 @@ document.addEventListener('DOMContentLoaded', function() {
   function solveGaussianElimination(matrixA, matrixB) {
     const n = matrixA.length;
     const steps = [];
+    const matrixL = [];
+    const matrixP = [];
+
+    // Criar matriz de permutação
+    for (let i = 0; i < n; i++) {
+      const row = [];
+      for (let j = 0; j < n; j++) {
+        row.push(i === j ? 1 : 0);
+      }
+      matrixP.push(row);
+    }
+  
+    // Inicializar a matriz L com zeros
+    for (let i = 0; i < n; i++) {
+      matrixL[i] = new Array(n).fill(0);
+    }
   
     // Concatenar a matriz B à matriz A
     for (let i = 0; i < n; i++) {
@@ -130,9 +160,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Trocar as linhas se necessário
         if (swapRow !== -1) {
           [matrixA[i], matrixA[swapRow]] = [matrixA[swapRow], matrixA[i]];
-          [matrixB[i], matrixB[swapRow]] = [matrixB[swapRow], matrixB[i]];
+          [matrixL[i], matrixL[swapRow]] = [matrixL[swapRow], matrixL[i]]; // Atualizar a matriz L
+          [matrixP[i], matrixP[swapRow]] = [matrixP[swapRow], matrixP[i]];
         }
       }
+  
+      // Calcular os elementos da matriz L
+      for (let j = i + 1; j < n; j++) {
+        matrixL[j][i] = matrixA[j][i] / matrixA[i][i];
+      }
+      matrixL[i][i] = 1;
   
       // Encontrar o pivô máximo
       let maxRow = i;
@@ -159,27 +196,58 @@ document.addEventListener('DOMContentLoaded', function() {
         matrixA[j][n] -= matrixA[j][i] * solution[i];
       }
     }
-  
+
+    // Criar matriz U
+    const matrixU = [];
+    for (let i = 0; i < matrixA.length; i++) {
+      matrixU[i] = matrixA[i].slice(0, -1); // Copia todas as colunas, exceto a última
+    }
+
     // Armazenar a matriz final
     steps.push(JSON.parse(JSON.stringify(matrixA)));
   
-    // Exibir cada etapa da matriz
-    for (let i = 1; i < steps.length - 1; i++) {
-      const stepTitle = document.createElement('h3');
-      stepTitle.textContent = `Etapa ${i}:`;
-      document.getElementById('matrix-steps').appendChild(stepTitle);
-  
-      const matrixId = `step-matrix-${i}`;
-      const matrixContainer = document.createElement('div');
-      matrixContainer.classList.add('matrix-container');
-      matrixContainer.innerHTML = `<table id="${matrixId}"></table>`;
-      document.getElementById('matrix-steps').appendChild(matrixContainer);
-  
-      displayMatrix(steps[i], matrixId);
+    if (!hasNullOnDiagonal(matrixA)) {
+      // Exibir cada etapa da matriz
+      for (let i = 1; i < steps.length - 1; i++) {
+        const stepTitle = document.createElement('h3');
+        stepTitle.textContent = `Etapa ${i}:`;
+        document.getElementById('matrix-steps').appendChild(stepTitle);
+
+        const matrixId = `step-matrix-${i}`;
+        const matrixContainer = document.createElement('div');
+        matrixContainer.classList.add('matrix-container');
+        matrixContainer.innerHTML = `<table id="${matrixId}"></table>`;
+        document.getElementById('matrix-steps').appendChild(matrixContainer);
+
+        displayMatrix(steps[i], matrixId);
+      }
+
+      // Exibir a matriz L
+      const matrixLContainer = document.getElementById('matrix-l');
+      matrixLContainer.innerHTML = '<h3>Matriz L:</h3>';
+      const matrixLId = 'matrix-l-content';
+      matrixLContainer.innerHTML += `<table id="${matrixLId}"></table>`;
+      displayMatrix(matrixL, matrixLId);
+
+      // Exibir a matriz U
+      const matrixUContainer = document.getElementById('matrix-u');
+      matrixUContainer.innerHTML = '<h3>Matriz U:</h3>';
+      const matrixUId = 'matrix-u-content';
+      matrixUContainer.innerHTML += `<table id="${matrixUId}"></table>`;
+      displayMatrix(matrixU, matrixUId);
+
+      // Exibir a matriz P
+      const matrixPContainer = document.getElementById('matrix-p');
+      matrixPContainer.innerHTML = '<h3>Matriz de Permutação:</h3>';
+      const matrixPId = 'matrix-p-content';
+      matrixPContainer.innerHTML += `<table id="${matrixPId}"></table>`;
+      displayMatrix(matrixP, matrixPId);
+
+      displaySolution(solution)
+    } else {
+        alert('Não é possivel chegar a uma conclusão utilizando o método escolhido');
     }
-  
-    return solution;
-  }
+  }  
     
   function displayMatrix(matrix, matrixId) {
     const matrixTable = document.getElementById(matrixId);
@@ -216,6 +284,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   
     document.getElementById('result').style.display = 'block';
+  }
+
+  function hasNullOnDiagonal(matrix) {
+    const n = matrix.length;
+    for (let i = 0; i < n; i++) {
+      if (matrix[i][i] === 0) {
+        return true; // Encontrou um número nulo na diagonal principal
+      }
+    }
+    return false; // Não encontrou nenhum número nulo na diagonal principal
   }
   
 });
