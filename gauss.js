@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
   const createMatrixBtn = document.getElementById('create-matrix-btn');
   const calculateBtn = document.getElementById('calculate-btn');
+  const refreshBtn = document.getElementById('refresh-btn');
+
+  refreshBtn.addEventListener('click', function () {
+    clearPage();
+  });
 
   createMatrixBtn.addEventListener('click', function () {
     resetResults();
@@ -53,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('matrix-u').innerHTML = '';
     document.getElementById('matrix-p').innerHTML = '';
     document.getElementById('solution').innerHTML = '';
+  }
+
+  function clearPage() {
+    resetResults();
+    document.getElementById('matrix-input').style.display = 'none';
   }
 
   function createMatrixInput(numRows, numColumns, matrixId) {
@@ -211,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const matrixId = `step-matrix-${i}`;
         const matrixContainer = document.createElement('div');
-        matrixContainer.classList.add('matrix-container');
+        matrixContainer.classList.add('matrix-table');
         matrixContainer.innerHTML = `<table id="${matrixId}"></table>`;
         document.getElementById('matrix-steps').appendChild(matrixContainer);
 
@@ -248,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function displayMatrix(matrix, matrixId) {
     const matrixTable = document.getElementById(matrixId);
     matrixTable.innerHTML = '';
-    matrixTable.classList.add('matrix-table'); // Adicionar a classe CSS
+    matrixTable.classList.add('matrix-table');
 
     for (let i = 0; i < matrix.length; i++) {
       const row = document.createElement('tr');
@@ -269,6 +279,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function displaySolution(solution) {
     const solutionDiv = document.getElementById('solution');
     solutionDiv.textContent = '';
+
+    const solutionTitle = document.createElement('h2');
+    solutionTitle.textContent = 'Resultado';
+    solutionDiv.appendChild(solutionTitle);
 
     for (let i = 0; i < solution.length; i++) {
       const variable = i + 1;

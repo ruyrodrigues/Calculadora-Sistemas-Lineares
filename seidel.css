@@ -1,168 +1,247 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f6f6f6;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-    min-height: 100vh;
-  }
+  font-family: Arial, sans-serif;
+  background-color: #f6f6f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 10px;
+  min-height: 100vh;
+}
 
-  .container {
-    max-width: 500px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+.container {
+  max-width: 500px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  .header-top {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+.header-top {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  .header-top h1 {
-    text-align: center;
-    margin-top: 0;
-    color: #333;
-  }
+.header-top h1 {
+  text-align: center;
+  margin-top: 0;
+  color: #333;
+}
 
-  .header-top div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+.header-top div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  .header-top label {
-    margin-right: 10px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .matrix-inputField {
-    width: 45px;
-    height: 30px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-right: 10px;
-    outline: none;
-  }
+.header-top label {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #333;
+}
 
-  .epsilon-inputField {
-    width: 72px;
-    height: 30px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-right: 10px;
-    outline: none;
-  }
-  
-  .order-input button {
-    padding: 5px 10px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 4px;
-  }
-  
-  .order-input button:hover {
-    background-color: #45a049;
-  }
+.matrix-inputField {
+  width: 45px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  outline: none;
+}
 
-  .matrix-container {
-    display: flex;
-    justify-content: center;
-  }
+.epsilon-inputField {
+  width: 72px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  outline: none;
+}
 
-  .matrix-container tr {
-    display: flex;
-    justify-content: center;
-  }
+.order-input button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 4px;
+}
 
-  .fillMatrix-title {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .matrix-title {
-    text-align: center;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    color: #666;
-  }
+.order-input button:hover {
+  background-color: #45a049;
+}
 
-  .matrix-container td input {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 2px;
-    font-size: 16px;
-  }
+.matrix-container {
+  display: flex;
+  justify-content: center;
+}
 
-  .matrix-container div {
-    margin-right: 20px;
-  }
+.matrix-container tr {
+  display: flex;
+  justify-content: center;
+}
 
-  .matrix-container table {
-    display: flex;
-    flex-direction: column;
-  }
+.fillMatrix-title {
+  display: flex;
+  justify-content: center;
+}
 
-  .matrix-container td {
-    display: flex;
-    justify-content: center;
-  }
+.matrix-title {
+  text-align: center;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  color: #666;
+}
 
-  .chute-container {
-    margin-left: 10px;
-  }
-  
-  #calculate-btn {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  #calculate-btn:hover {
-    background-color: #45a049;
-  }
+.matrix-container td input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 2px;
+  font-size: 16px;
+}
 
-  .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 5px 10px;
-    background-color: #4caf50;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-  
-  .back-button:hover {
-    background-color: #45a049;
-  }
+.matrix-container div {
+  margin-right: 20px;
+}
+
+.matrix-container table {
+  display: flex;
+  flex-direction: column;
+}
+
+.matrix-container td {
+  display: flex;
+  justify-content: center;
+}
+
+.chute-container {
+  margin-left: 10px;
+}
+
+#calculate-btn {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#calculate-btn:hover {
+  background-color: #45a049;
+}
+
+.buttons-container {
+  top: 22px;
+  left: 10px;
+  position: absolute;
+}
+
+.top-button {
+  margin-top: 20px;
+  margin-left: 4px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.top-button:hover {
+  background-color: #45a049;
+}
+
+#result {
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#result h2 {
+  margin-bottom: 10px;
+  margin-top: 0px;
+  color: #333;
+  display: flex;
+  justify-content: center;
+}
+
+#iterations-container {
+  margin-bottom: 20px;
+}
+
+#iterations-container ul {
+  margin-top: 8px;
+}
+
+#solution-container {
+  margin-bottom: 0px;
+  margin-top: 30px;
+}
+
+#solution-container h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+#solution-container ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0px;
+}
+
+#solution-container li {
+  margin-bottom: 5px;
+  color: #242121;
+  font-weight: bold;
+}
+
+.iteration {
+  margin-bottom: 20px;
+}
+
+.iteration h3 {
+  margin: 0;
+  color: #333;
+}
+
+.iteration table {
+  margin-top: 5px;
+  border-collapse: collapse;
+}
+
+.iteration td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  color: #333;
+}
+
+.iteration td:first-child {
+  font-weight: bold;
+}

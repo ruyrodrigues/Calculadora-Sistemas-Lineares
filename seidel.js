@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
     const createMatrixBtn = document.getElementById('create-matrix-btn');
     const calculateBtn = document.getElementById('calculate-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    refreshBtn.addEventListener('click', function (){
+        clearPage();
+    });
 
     createMatrixBtn.addEventListener('click', function () {
-        //resetResults();
+        resetResults();
 
         const matrixOrder = parseInt(document.getElementById('matrix-order').value);
 
@@ -124,29 +129,29 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentSolution = chuteInicial.slice(); // Copia o chute inicial
         let error = epsilon + 1; // Inicializa o erro com um valor maior que epsilon
         let iterations = [];
-      
+
         while (error > epsilon) {
-          let nextSolution = currentSolution.slice(); // Copia a solução atual para a próxima iteração
-      
-          for (let i = 0; i < numRows; i++) {
-            let sum = 0;
-      
-            for (let j = 0; j < numColumns; j++) {
-              if (j !== i) {
-                sum += matrixA[i][j] * nextSolution[j]; // Utiliza a próxima solução atualizada
-              }
+            let nextSolution = currentSolution.slice(); // Copia a solução atual para a próxima iteração
+
+            for (let i = 0; i < numRows; i++) {
+                let sum = 0;
+
+                for (let j = 0; j < numColumns; j++) {
+                    if (j !== i) {
+                        sum += matrixA[i][j] * nextSolution[j]; // Utiliza a próxima solução atualizada
+                    }
+                }
+
+                nextSolution[i] = (matrixB[i] - sum) / matrixA[i][i];
             }
-      
-            nextSolution[i] = (matrixB[i] - sum) / matrixA[i][i];
-          }
-      
-          error = calculateError(currentSolution, nextSolution);
-          currentSolution = nextSolution;
-          iterations.push(currentSolution.slice()); // Armazena a solução atual em cada iteração
+
+            error = calculateError(currentSolution, nextSolution);
+            currentSolution = nextSolution;
+            iterations.push(currentSolution.slice()); // Armazena a solução atual em cada iteração
         }
-      
+
         return iterations;
-      }      
+    }
 
     function calculateError(solution1, solution2) {
         const numVariables = solution1.length;
@@ -161,24 +166,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return maxDiff;
-    }
-
-    function displaySolution(solution) {
-        const solutionContainer = document.getElementById('solution-container');
-        solutionContainer.innerHTML = '';
-
-        const solutionTitle = document.createElement('h2');
-        solutionTitle.textContent = 'Solução do Sistema:';
-        solutionContainer.appendChild(solutionTitle);
-
-        const solutionList = document.createElement('ul');
-        solution[solution.length - 1].forEach(function (value, index) {
-            const listItem = document.createElement('li');
-            listItem.textContent = `x${index + 1} = ${value.toFixed(4)}`;
-            solutionList.appendChild(listItem);
-        });
-
-        solutionContainer.appendChild(solutionList);
     }
 
     function isSassenfeldConvergent(matrixA) {
@@ -220,30 +207,58 @@ document.addEventListener('DOMContentLoaded', function () {
     function displayIterations(iterations) {
         const iterationsContainer = document.getElementById('iterations-container');
         iterationsContainer.innerHTML = '';
-      
+
         const iterationsTitle = document.createElement('h2');
         iterationsTitle.textContent = 'Iterações';
         iterationsContainer.appendChild(iterationsTitle);
-      
+
         iterations.forEach((iteration, index) => {
-          const iterationNumber = index + 1;
-          const iterationDiv = document.createElement('div');
-          iterationDiv.classList.add('iteration');
-      
-          const iterationHeader = document.createElement('h3');
-          iterationHeader.textContent = `k(${iterationNumber}):`;
-          iterationDiv.appendChild(iterationHeader);
-      
-          const variablesList = document.createElement('ul');
-          iteration.forEach((variable, variableIndex) => {
-            const variableListItem = document.createElement('li');
-            variableListItem.textContent = `x${variableIndex + 1} = ${variable.toFixed(4)}`;
-            variablesList.appendChild(variableListItem);
-          });
-      
-          iterationDiv.appendChild(variablesList);
-          iterationsContainer.appendChild(iterationDiv);
+            const iterationNumber = index + 1;
+            const iterationDiv = document.createElement('div');
+            iterationDiv.classList.add('iteration');
+            iterationDiv.innerHTML = `
+            <h3>k(${iterationNumber})</h3>
+            <ul>
+              ${iteration.map((value, index) => `<li>x${index + 1} = ${value.toFixed(4)}</li>`).join('')}
+            </ul>
+          `;
+            iterationsContainer.appendChild(iterationDiv);
         });
+
+        document.getElementById('result').style.display = 'block';
+    }
+
+    function displaySolution(solution) {
+        const solutionContainer = document.getElementById('solution-container');
+        solutionContainer.innerHTML = '';
+
+        const solutionTitle = document.createElement('h2');
+        solutionTitle.textContent = 'Solução do Sistema';
+        solutionContainer.appendChild(solutionTitle);
+
+        const finalSolution = solution[solution.length - 1];
+        const solutionList = document.createElement('ul');
+        finalSolution.forEach((value, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `x${index + 1} = ${value.toFixed(4)}`;
+            solutionList.appendChild(listItem);
+        });
+
+        solutionContainer.appendChild(solutionList);
+
+        document.getElementById('result').style.display = 'block';
+    }
+
+    function resetResults() {
+        document.getElementById('result').style.display = 'none';
+        document.getElementById('iterations-container').innerHTML = '';
+        document.getElementById('solution-container').innerHTML = '';
       }
-      
+
+      function clearPage() {
+        resetResults()
+        document.getElementById('matrix-order').value = 2;
+        document.getElementById('epsilon-value').value = undefined;
+        document.getElementById('matrix-input').style.display = 'none';
+      }
 });
