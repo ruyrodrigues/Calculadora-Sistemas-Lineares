@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 16gitpx;
+    margin-top: 16px;
     min-height: 100vh;
 }
 
