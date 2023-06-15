@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('A matriz fornecida não atende ao critério das linhas dominantes. Não é possível utilizar o método de Gauss-Seidel para resolver o sistema.');
             } else {
                 const solution = gaussSeidel(matrixA, matrixB, chuteInicial, inputEpsilon);
+                displayIterations(solution);
                 displaySolution(solution);
             }
         }
@@ -122,28 +123,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const numColumns = matrixA[0].length;
         let currentSolution = chuteInicial.slice(); // Copia o chute inicial
         let error = epsilon + 1; // Inicializa o erro com um valor maior que epsilon
-
+        let iterations = [];
+      
         while (error > epsilon) {
-            let nextSolution = currentSolution.slice(); // Copia a solução atual para a próxima iteração
-
-            for (let i = 0; i < numRows; i++) {
-                let sum = 0;
-
-                for (let j = 0; j < numColumns; j++) {
-                    if (j !== i) {
-                        sum += matrixA[i][j] * nextSolution[j]; // Utiliza a próxima solução atualizada
-                    }
-                }
-
-                nextSolution[i] = (matrixB[i] - sum) / matrixA[i][i];
+          let nextSolution = currentSolution.slice(); // Copia a solução atual para a próxima iteração
+      
+          for (let i = 0; i < numRows; i++) {
+            let sum = 0;
+      
+            for (let j = 0; j < numColumns; j++) {
+              if (j !== i) {
+                sum += matrixA[i][j] * nextSolution[j]; // Utiliza a próxima solução atualizada
+              }
             }
-
-            error = calculateError(currentSolution, nextSolution);
-            currentSolution = nextSolution;
+      
+            nextSolution[i] = (matrixB[i] - sum) / matrixA[i][i];
+          }
+      
+          error = calculateError(currentSolution, nextSolution);
+          currentSolution = nextSolution;
+          iterations.push(currentSolution.slice()); // Armazena a solução atual em cada iteração
         }
-
-        return currentSolution;
-    }
+      
+        return iterations;
+      }      
 
     function calculateError(solution1, solution2) {
         const numVariables = solution1.length;
@@ -169,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
         solutionContainer.appendChild(solutionTitle);
 
         const solutionList = document.createElement('ul');
-        solution.forEach(function (value, index) {
+        solution[solution.length - 1].forEach(function (value, index) {
             const listItem = document.createElement('li');
             listItem.textContent = `x${index + 1} = ${value.toFixed(4)}`;
             solutionList.appendChild(listItem);
@@ -213,4 +216,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return true;
     }
+
+    function displayIterations(iterations) {
+        const iterationsContainer = document.getElementById('iterations-container');
+        iterationsContainer.innerHTML = '';
+      
+        const iterationsTitle = document.createElement('h2');
+        iterationsTitle.textContent = 'Iterações';
+        iterationsContainer.appendChild(iterationsTitle);
+      
+        iterations.forEach((iteration, index) => {
+          const iterationNumber = index + 1;
+          const iterationDiv = document.createElement('div');
+          iterationDiv.classList.add('iteration');
+      
+          const iterationHeader = document.createElement('h3');
+          iterationHeader.textContent = `k(${iterationNumber}):`;
+          iterationDiv.appendChild(iterationHeader);
+      
+          const variablesList = document.createElement('ul');
+          iteration.forEach((variable, variableIndex) => {
+            const variableListItem = document.createElement('li');
+            variableListItem.textContent = `x${variableIndex + 1} = ${variable.toFixed(4)}`;
+            variablesList.appendChild(variableListItem);
+          });
+      
+          iterationDiv.appendChild(variablesList);
+          iterationsContainer.appendChild(iterationDiv);
+        });
+      }
+      
 });
