@@ -6,9 +6,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
+    margin-top: 16gitpx;
     min-height: 100vh;
 }
+
+.header-top {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
 
 a {
     display: block;
@@ -33,12 +41,24 @@ h1 {
     margin-top: 0;
 }
 
+h2 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 .menu {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
     padding: 10px 20px;
     background-color: #4caf50;
     color: #fff;
