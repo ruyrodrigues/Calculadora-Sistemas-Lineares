@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       displaySolution(solution)
     } else {
-      alert('Não é possivel chegar a uma conclusão utilizando o método escolhido');
+      alert('Não é possivel chegar a uma conclusão utilizando a Eliminação de Gauss.');
     }
   }
 
