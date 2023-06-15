@@ -155,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Verificar se o elemento da diagonal principal é nulo
       if (matrixA[i][i] === 0) {
-        // Encontrar o índice da primeira linha não nula
         let swapRow = -1;
         for (let j = i + 1; j < n; j++) {
           if (matrixA[j][i] !== 0) {
@@ -166,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Trocar as linhas se necessário
         if (swapRow !== -1) {
           [matrixA[i], matrixA[swapRow]] = [matrixA[swapRow], matrixA[i]];
-          [matrixL[i], matrixL[swapRow]] = [matrixL[swapRow], matrixL[i]]; // Atualizar a matriz L
+          [matrixL[i], matrixL[swapRow]] = [matrixL[swapRow], matrixL[i]];
           [matrixP[i], matrixP[swapRow]] = [matrixP[swapRow], matrixP[i]];
         }
       }
@@ -206,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Criar matriz U
     const matrixU = [];
     for (let i = 0; i < matrixA.length; i++) {
-      matrixU[i] = matrixA[i].slice(0, -1); // Copia todas as colunas, exceto a última
+      matrixU[i] = matrixA[i].slice(0, -1);
     }
 
     // Armazenar a matriz final
@@ -300,10 +299,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const n = matrix.length;
     for (let i = 0; i < n; i++) {
       if (matrix[i][i] === 0) {
-        return true; // Encontrou um número nulo na diagonal principal
+        return true;
       }
     }
-    return false; // Não encontrou nenhum número nulo na diagonal principal
+    return false;
   }
-
+  
 });

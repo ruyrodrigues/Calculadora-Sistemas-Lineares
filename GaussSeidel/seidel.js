@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function gaussSeidel(matrixA, matrixB, chuteInicial, epsilon) {
         const numRows = chuteInicial.length;
         const numColumns = matrixA[0].length;
-        let currentSolution = chuteInicial.slice(); // Copia o chute inicial
-        let error = epsilon + 1; // Inicializa o erro com um valor maior que epsilon
+        let currentSolution = chuteInicial.slice();
+        let error = epsilon + 1;
         let iterations = [];
 
         while (error > epsilon) {
