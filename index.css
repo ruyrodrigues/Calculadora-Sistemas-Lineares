@@ -8,9 +8,9 @@ body {
     align-items: center;
     margin-top: 100px;
     min-height: 100vh;
-  }
-  
-  a {
+}
+
+a {
     display: block;
     text-align: center;
     color: #fff;
@@ -19,25 +19,25 @@ body {
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
-  }
-  
-  a:hover {
+}
+
+a:hover {
     background-color: #555;
-  }
-  
-  .container {
+}
+
+.container {
     text-align: center;
-  }
-  
-  h1 {
+}
+
+h1 {
     margin-top: 0;
-  }
-  
-  .menu {
+}
+
+.menu {
     margin-top: 20px;
-  }
-  
-  .btn {
+}
+
+.btn {
     display: inline-block;
     padding: 10px 20px;
     background-color: #4caf50;
@@ -45,10 +45,8 @@ body {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
-  }
-  
-  .btn:hover {
+}
+
+.btn:hover {
     background-color: #45a049;
-  }
-  
-  
+}

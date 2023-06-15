@@ -1,23 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const createMatrixBtn = document.getElementById('create-matrix-btn');
   const calculateBtn = document.getElementById('calculate-btn');
 
-  createMatrixBtn.addEventListener('click', function() {
-    // Reiniciar a div de resultado
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('matrix-steps').innerHTML = '';
-    document.getElementById('matrix-l').innerHTML = '';
-    document.getElementById('matrix-u').innerHTML = '';
-    document.getElementById('matrix-p').innerHTML = '';
-    document.getElementById('solution').innerHTML = '';
-  
+  createMatrixBtn.addEventListener('click', function () {
+    resetResults();
+
     const matrixOrder = parseInt(document.getElementById('matrix-order').value);
-  
+
     createMatrixInput(matrixOrder, matrixOrder, 'matrix-a');
     createMatrixInput(matrixOrder, 1, 'matrix-b');
   });
 
-  calculateBtn.addEventListener('click', function() {
+  calculateBtn.addEventListener('click', function () {
     const inputsMatrixA = document.querySelectorAll(`#matrix-a input`);
     const inputsMatrixB = document.querySelectorAll(`#matrix-b input`);
     let allFieldsFilled = true;
@@ -28,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
     }
-    
+
     for (let i = 0; i < inputsMatrixB.length; i++) {
       if (inputsMatrixB[i].value === '') {
         allFieldsFilled = false;
@@ -39,47 +33,49 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!allFieldsFilled) {
       alert('Preencha todos os campos da matriz antes de calcular.');
     } else {
-      // Reiniciar a div de resultado
-      document.getElementById('result').style.display = 'none';
-      document.getElementById('matrix-steps').innerHTML = '';
-      document.getElementById('matrix-l').innerHTML = '';
-      document.getElementById('matrix-u').innerHTML = '';
-      document.getElementById('matrix-p').innerHTML = '';
-      document.getElementById('solution').innerHTML = '';
+      resetResults();
       const matrixA = getMatrixInput('matrix-a');
       const matrixB = getMatrixInput('matrix-b');
-  
+
       if (matrixA.length === 0 || matrixB.length === 0) {
         console.error('As matrizes não estão preenchidas corretamente.');
         return;
       }
-  
+
       solveGaussianElimination(matrixA, matrixB);
     }
   });
-  
-  
+
+  function resetResults() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('matrix-steps').innerHTML = '';
+    document.getElementById('matrix-l').innerHTML = '';
+    document.getElementById('matrix-u').innerHTML = '';
+    document.getElementById('matrix-p').innerHTML = '';
+    document.getElementById('solution').innerHTML = '';
+  }
+
   function createMatrixInput(numRows, numColumns, matrixId) {
     const matrixTable = document.getElementById(matrixId);
     matrixTable.innerHTML = '';
-  
+
     for (let i = 0; i < numRows; i++) {
       const row = document.createElement('tr');
-  
+
       for (let j = 0; j < numColumns; j++) {
         const cell = document.createElement('td');
         const input = document.createElement('input');
-  
+
         cell.appendChild(input);
         row.appendChild(cell);
       }
-  
+
       matrixTable.appendChild(row);
     }
-  
+
     document.getElementById('matrix-input').style.display = 'block';
-  }  
-  
+  }
+
   function getMatrixInput(matrixId) {
     const matrixTable = document.getElementById(matrixId);
 
@@ -117,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     return matrix;
   }
-  
+
   function solveGaussianElimination(matrixA, matrixB) {
     const n = matrixA.length;
     const steps = [];
@@ -132,21 +128,21 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       matrixP.push(row);
     }
-  
+
     // Inicializar a matriz L com zeros
     for (let i = 0; i < n; i++) {
       matrixL[i] = new Array(n).fill(0);
     }
-  
+
     // Concatenar a matriz B à matriz A
     for (let i = 0; i < n; i++) {
       matrixA[i].push(matrixB[i][0]);
     }
-  
+
     for (let i = 0; i < n; i++) {
       // Armazenar a matriz atual em cada etapa
       steps.push(JSON.parse(JSON.stringify(matrixA)));
-  
+
       // Verificar se o elemento da diagonal principal é nulo
       if (matrixA[i][i] === 0) {
         // Encontrar o índice da primeira linha não nula
@@ -164,13 +160,13 @@ document.addEventListener('DOMContentLoaded', function() {
           [matrixP[i], matrixP[swapRow]] = [matrixP[swapRow], matrixP[i]];
         }
       }
-  
+
       // Calcular os elementos da matriz L
       for (let j = i + 1; j < n; j++) {
         matrixL[j][i] = matrixA[j][i] / matrixA[i][i];
       }
       matrixL[i][i] = 1;
-  
+
       // Encontrar o pivô máximo
       let maxRow = i;
       for (let j = i + 1; j < n; j++) {
@@ -178,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
           maxRow = j;
         }
       }
-  
+
       // Zerar os elementos abaixo do pivô
       for (let j = i + 1; j < n; j++) {
         const factor = matrixA[j][i] / matrixA[i][i];
@@ -187,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     }
-  
+
     // Resolver o sistema triangular superior
     const solution = new Array(n);
     for (let i = n - 1; i >= 0; i--) {
@@ -205,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Armazenar a matriz final
     steps.push(JSON.parse(JSON.stringify(matrixA)));
-  
+
     if (!hasNullOnDiagonal(matrixA)) {
       // Exibir cada etapa da matriz
       for (let i = 1; i < steps.length - 1; i++) {
@@ -245,18 +241,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
       displaySolution(solution)
     } else {
-        alert('Não é possivel chegar a uma conclusão utilizando o método escolhido');
+      alert('Não é possivel chegar a uma conclusão utilizando o método escolhido');
     }
-  }  
-    
+  }
+
   function displayMatrix(matrix, matrixId) {
     const matrixTable = document.getElementById(matrixId);
     matrixTable.innerHTML = '';
     matrixTable.classList.add('matrix-table'); // Adicionar a classe CSS
-  
+
     for (let i = 0; i < matrix.length; i++) {
       const row = document.createElement('tr');
-  
+
       for (let j = 0; j < matrix[i].length; j++) {
         const cell = document.createElement('td');
         const value = matrix[i][j];
@@ -265,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cell.appendChild(textNode);
         row.appendChild(cell);
       }
-  
+
       matrixTable.appendChild(row);
     }
   }
@@ -273,16 +269,16 @@ document.addEventListener('DOMContentLoaded', function() {
   function displaySolution(solution) {
     const solutionDiv = document.getElementById('solution');
     solutionDiv.textContent = '';
-  
+
     for (let i = 0; i < solution.length; i++) {
       const variable = i + 1;
       const value = solution[i].toFixed(2);
       const equation = document.createElement('p');
       equation.textContent = `x${variable} = ${value}`;
-  
+
       solutionDiv.appendChild(equation);
     }
-  
+
     document.getElementById('result').style.display = 'block';
   }
 
@@ -295,5 +291,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     return false; // Não encontrou nenhum número nulo na diagonal principal
   }
-  
+
 });
