@@ -43,7 +43,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!allFieldsFilled || !inputEpsilon) {
             alert('Preencha todos os campos das matrizes e determine o Épsilon antes de calcular.');
         } else {
-            
+            const matrixA = getMatrixInput('matrix-a');
+            const matrixB = getMatrixInput('matrix-b');
+            const chuteInicial = getMatrixInput('chute-inicial');
+
+            if (!isSassenfeldConvergent(matrixA)) {
+                alert('A matriz fornecida não atende ao critério de Sassenfeld. Não é possível utilizar o método de Gauss-Seidel para resolver o sistema.');
+            } else if (!isDiagonallyDominant(matrixA)) {
+                alert('A matriz fornecida não atende ao critério das linhas dominantes. Não é possível utilizar o método de Gauss-Seidel para resolver o sistema.');
+            } else {
+                const solution = gaussSeidel(matrixA, matrixB, chuteInicial, inputEpsilon);
+                displaySolution(solution);
+            }
         }
     });
 
@@ -66,5 +77,140 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         document.getElementById('matrix-input').style.display = 'block';
+    }
+
+    function getMatrixInput(matrixId) {
+        const matrixTable = document.getElementById(matrixId);
+
+        if (!matrixTable) {
+            console.error(`Tabela de matriz "${matrixId}" não encontrada.`);
+            return [];
+        }
+
+        const rows = matrixTable.getElementsByTagName('tr');
+        const matrix = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            const row = [];
+
+            for (let j = 0; j < cells.length; j++) {
+                const input = cells[j].querySelector('input');
+
+                if (input) {
+                    const value = parseFloat(input.value);
+
+                    if (isNaN(value)) {
+                        console.error('Os valores da matriz devem ser números válidos.');
+                        return [];
+                    }
+
+                    row.push(value);
+                }
+            }
+
+            if (row.length > 0) {
+                matrix.push(row);
+            }
+        }
+
+        return matrix;
+    }
+
+    function gaussSeidel(matrixA, matrixB, chuteInicial, epsilon) {
+        const numRows = chuteInicial.length;
+        const numColumns = matrixA[0].length;
+        let currentSolution = chuteInicial.slice(); // Copia o chute inicial
+        let error = epsilon + 1; // Inicializa o erro com um valor maior que epsilon
+
+        while (error > epsilon) {
+            let nextSolution = currentSolution.slice(); // Copia a solução atual para a próxima iteração
+
+            for (let i = 0; i < numRows; i++) {
+                let sum = 0;
+
+                for (let j = 0; j < numColumns; j++) {
+                    if (j !== i) {
+                        sum += matrixA[i][j] * nextSolution[j]; // Utiliza a próxima solução atualizada
+                    }
+                }
+
+                nextSolution[i] = (matrixB[i] - sum) / matrixA[i][i];
+            }
+
+            error = calculateError(currentSolution, nextSolution);
+            currentSolution = nextSolution;
+        }
+
+        return currentSolution;
+    }
+
+    function calculateError(solution1, solution2) {
+        const numVariables = solution1.length;
+        let maxDiff = 0;
+
+        for (let i = 0; i < numVariables; i++) {
+            const diff = Math.abs(solution2[i] - solution1[i]);
+
+            if (diff > maxDiff) {
+                maxDiff = diff;
+            }
+        }
+
+        return maxDiff;
+    }
+
+    function displaySolution(solution) {
+        const solutionContainer = document.getElementById('solution-container');
+        solutionContainer.innerHTML = '';
+
+        const solutionTitle = document.createElement('h2');
+        solutionTitle.textContent = 'Solução do Sistema:';
+        solutionContainer.appendChild(solutionTitle);
+
+        const solutionList = document.createElement('ul');
+        solution.forEach(function (value, index) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `x${index + 1} = ${value.toFixed(4)}`;
+            solutionList.appendChild(listItem);
+        });
+
+        solutionContainer.appendChild(solutionList);
+    }
+
+    function isSassenfeldConvergent(matrixA) {
+        const numRows = matrixA.length;
+        const rowCoefficients = [];
+
+        for (let i = 0; i < numRows; i++) {
+            const row = matrixA[i];
+            const rowSum = row.reduce((sum, coefficient) => sum + Math.abs(coefficient), 0);
+            const otherCoefficientsSum = row.slice(0, i).reduce((sum, coefficient) => sum + Math.abs(coefficient), 0);
+            rowCoefficients[i] = otherCoefficientsSum / rowSum;
+        }
+
+        const maxCoefficient = Math.max(...rowCoefficients);
+        return maxCoefficient < 1;
+    }
+
+    function isDiagonallyDominant(matrixA) {
+        const numRows = matrixA.length;
+
+        for (let i = 0; i < numRows; i++) {
+            const row = matrixA[i];
+            const diagonalElement = Math.abs(row[i]);
+            const otherElementsSum = row.reduce((sum, coefficient, index) => {
+                if (index !== i) {
+                    return sum + Math.abs(coefficient);
+                }
+                return sum;
+            }, 0);
+
+            if (diagonalElement <= otherElementsSum) {
+                return false;
+            }
+        }
+
+        return true;
     }
 });
